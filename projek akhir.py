@@ -39,13 +39,7 @@ class Karakter:
 
 
 root = Tk()
-
-root.title("game")
-
-def image():
-    global pto
-    pto=ImageTk.PhotoImage(Image.open("C:/Users/HP/Documents/pemlan/clipart1604104.png").resize((40,40)))
-    return pto
+root.title("kamus")
 
 def login():
     
@@ -53,8 +47,7 @@ def login():
         frm.destroy()
         
         regist()
-        
-  
+    
     def loginn():
         a = E1.get()
         b = E2.get()
@@ -71,26 +64,24 @@ def login():
             hasil.config(text="Username or password incorrect")
         elif a == "" or b == "":
             hasil.config(text="Username or password is required")
-                    
-        
+
         
     frm = Frame(root)
-    
-    
     frm.pack(pady=20, padx=10)
     
     Label(frm,text="Username").grid(column=0, row=0, sticky= N)
+    
     var = StringVar()
     E1=Entry(frm, textvariable=var)
     E1.grid(column=0, row=2, sticky=EW)
     
     Label(frm,text="Password").grid(column=0, row=4, sticky= N)
+    
     var2 = StringVar()
     E2=Entry(frm, textvariable=var2)
     E2.grid(column=0, row=6, sticky=EW)
     
     B1=Button(frm, text='login', command=loginn)
-    # B1.pack()
     B1.grid(column=0, row=8)
     
     
@@ -116,69 +107,53 @@ def play(akun):
     party=[]
     partyl=[]
     champion=[]
-    champb=[]
-    tes=[]
-    tes2=[]
-    i =0
-    r=0
-    c=0
+    button=[]
     index=0
+    
     frame1 = Frame(root)
     frame1.pack(pady=20, padx=10)
     frame2 = Frame(root)
     frame2.pack(pady=20, padx=10, side=BOTTOM)
-    hasil = Frame(root)
-    hasil.pack(pady=20, padx=10)
     
     Label(frame2, text='Party:').grid(sticky=EW, columnspan=4, row=0)
-    
-    
-    
     
     with open('pa.csv', 'r') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
             if row['USER'] == akun:
-                a=int(row['HP'])
-                b=int(row['ATTACK'])
-                champion.append(Karakter(row['NAMA'], a, b, row['PHOTO'], index))
-    print(len(champion))
-    print(champion)
-    
-    for k in range(3):
-        partyl.append(Label(frame2, bd=0))
-        partyl[k].grid(row=1, column=k)
+                champion.append(Karakter(row['NAMA'],int(row['HP']) , int(row['ATTACK']), row['PHOTO'], index))
+      
+    def masuk(z):
         
-    def masuk(nama, k):
-        if nama not in party:
-            if len(party) <= 4:
-                
-                party.append(nama)
-                
-                partyl[len(party)-1].config(image=k)
-            else:
-                print("nothing")
-   
-            print(nama)
-    
+        if champion[z].getName() not in party:
+            party.append(champion[z].getName())
+            partyl[z].config(image=champion[z]._photo)
+        
+            
     def find(party):
         if len(party) >= 3:
             frame1.destroy()
             frame2.destroy()
             findmatch(party, akun)
-  
+    
+   
+    for k in range(3):
+        partyl.append(Label(frame2))
+        partyl[k].grid(row=1, column=k)
+        
+    for j in range(len(champion)):
+        button.append(Button(frame1, image=champion[j]._photo, bd=0, command=lambda n=j:masuk(n)))
+        button[j].grid(row=0, column= j)
+    
+    
     Button(frame2, text='find match', command=lambda:find(party)).grid(row=2, columnspan=3)
-    Button(frame1, image=champion[0]._photo, bd=0,  command=lambda:masuk(champion[0].getName(),  champion[0]._photo)).grid(row=0, column=0)
-    Button(frame1, image=champion[1]._photo, bd=0,  command=lambda:masuk(champion[1].getName(), champion[1]._photo)).grid(row=0, column=1)
-    Button(frame1, image=champion[2]._photo, bd=0,  command=lambda:masuk(champion[2].getName(), champion[2]._photo)).grid(row=0, column=2)
-    Button(frame1, image=champion[3]._photo, bd=0,  command=lambda:masuk(champion[3].getName(), champion[3]._photo)).grid(row=0, column=3)
+    
     
 def findmatch(party, akun):
     
     ally=[]
     enemy=[]
     bot=[]
-    
     with open('pa.csv', 'r') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
@@ -193,7 +168,7 @@ def findmatch(party, akun):
         for row in csv_reader:
             if row['USER'] not in bot or akun != row['USER']:
                 bot.append(row['USER'])
-    print(bot)
+    
     get = random.choice(bot)
     
     with open('pa.csv', 'r') as file:
@@ -208,14 +183,13 @@ def findmatch(party, akun):
                 break
             enemy.remove(random.choice(enemy))
             
+    
     pilih=[0,1,2]
     pilihe=[0,1,2]
     label=[]
     button=[]
     labele=[] 
-    
-    def nothing():
-        print("nothing")
+
         
     def pukul(i, j):
         def back():
@@ -230,6 +204,7 @@ def findmatch(party, akun):
         randally=random.choice(pilih)
         enemy[random.choice(pilihe)].memukul(ally[randally])
         label[randally].config(text='HP: '+str(ally[randally].getHp())+'\nAttack: '+str(ally[randally].getattack()), justify='left')
+        
         if enemy[j]._hp <= 0:
             pilihe.remove(j)
             labele[j].destroy()
@@ -240,6 +215,7 @@ def findmatch(party, akun):
             label[randally].destroy()
             button[randally].destroy()
             time.sleep(5)
+            
         if len(pilih)==0 and len(pilihe)==0:
             main.destroy()
             Label(hasil, text="Draw", font=100).grid(row=0)
@@ -266,8 +242,6 @@ def findmatch(party, akun):
         label[i].grid(column=1)
         button.append(Button(main, image=ally[i]._photo, bd=0, command=lambda:pukul(i, random.choice(pilihe))))
         button[i].grid(row=i+1, column=0)
-    
-    
        
     
     for i in range(len(enemy)):
@@ -281,13 +255,12 @@ def findmatch(party, akun):
         pen.append(Label(main, image=enemy[i]._photo, bd=0))
         pen[i].grid(row=i+1, column=3)
     
-    
-
+   
 def regist():
     def tofrm():
         frm2.destroy()
-        
         login()
+        
     def reg():
         a = E1.get()
         b = E2.get()
@@ -348,12 +321,15 @@ def regist():
             
     frm2 = Frame(root)
     frm2.pack(pady=20, padx=10)
+    
     Label(frm2,text="Username").grid(column=0, row=0, sticky= N)
+    
     var = StringVar()
     E1=Entry(frm2, textvariable=var)
     E1.grid(column=0, row=2, sticky=EW)
     
     Label(frm2,text="Password").grid(column=0, row=4, sticky= N)
+    
     var2 = StringVar()
     E2=Entry(frm2, textvariable=var2)
     E2.grid(column=0, row=6, sticky=EW)
