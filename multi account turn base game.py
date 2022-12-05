@@ -1,9 +1,7 @@
-from abc import ABC, abstractmethod
 from tkinter import *
 from PIL import Image, ImageTk
 import csv
 from os import system
-from prettytable import PrettyTable
 import random
 import time
 
