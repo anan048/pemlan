@@ -40,7 +40,7 @@ class Karakter:
 
 root = Tk()
 root.title("League of Slot")
-# bg = PhotoImage(file="C:/Users/HP/Documents/pemlan/656584.jpg")
+
 
 def login():
     
