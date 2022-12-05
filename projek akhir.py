@@ -3,7 +3,6 @@ from tkinter import *
 from PIL import Image, ImageTk
 import csv
 from os import system
-from prettytable import PrettyTable
 import random
 import time
 
@@ -127,7 +126,7 @@ def play(akun):
         
         if champion[z].getName() not in party:
             party.append(champion[z].getName())
-            partyl[z].config(image=champion[z]._photo)
+            partyl[len(party)-1].config(image=champion[z]._photo)
         
             
     def find(party):
@@ -195,26 +194,39 @@ def findmatch(party, akun):
         def back():
             hasil.destroy()
             mulai(akun)
-        print(f'{i} {j}')
+        
         ally[i].memukul(enemy[j])
         labele[j].configure(text='HP: '+str(enemy[j].getHp())+'\nAttack: '+str(enemy[j].getattack()), justify='left')
         
         time.sleep(1)
+        for i in pilihe:
+            pen[i].config(bg='#F0F0F0')
+        for i in pilih:
+            button[i].config(bg='#F0F0F0')
+            
+        time.sleep(1)
+        pen[j].config(bg='red')
+        time.sleep(2)
         
         randally=random.choice(pilih)
-        enemy[random.choice(pilihe)].memukul(ally[randally])
+        randenemy = random.choice(pilihe)
+        enemy[randenemy].memukul(ally[randally])
         label[randally].config(text='HP: '+str(ally[randally].getHp())+'\nAttack: '+str(ally[randally].getattack()), justify='left')
+        
+        pen[randenemy].config(bg='blue')
+        time.sleep(1)
+        button[randally].config(bg='red')
         
         if enemy[j]._hp <= 0:
             pilihe.remove(j)
             labele[j].destroy()
             pen[j].destroy()
-            time.sleep(5)
+            
         if ally[randally]._hp <= 0:
             pilih.remove(randally)
             label[randally].destroy()
             button[randally].destroy()
-            time.sleep(5)
+            
             
         if len(pilih)==0 and len(pilihe)==0:
             main.destroy()
@@ -240,7 +252,7 @@ def findmatch(party, akun):
     for i in range(len(ally)):
         label.append(Label(main, text='HP: '+str(ally[i].getHp())+'\nAttack: '+str(ally[i].getattack()), justify='left'))
         label[i].grid(column=1)
-        button.append(Button(main, image=ally[i]._photo, bd=0, command=lambda:pukul(i, random.choice(pilihe))))
+        button.append(Button(main, image=ally[i]._photo, bd=0, activebackground='blue', command=lambda:pukul(i, random.choice(pilihe))))
         button[i].grid(row=i+1, column=0)
        
     
