@@ -3,6 +3,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 import csv
 from os import system
+from prettytable import PrettyTable
 import random
 import time
 
@@ -38,13 +39,13 @@ class Karakter:
 
 
 root = Tk()
-root.title("kamus")
+root.title("League of Slot")
+# bg = PhotoImage(file="C:/Users/HP/Documents/pemlan/656584.jpg")
 
 def login():
     
     def tofrm2():
         frm.destroy()
-        
         regist()
     
     def loginn():
@@ -139,11 +140,13 @@ def play(akun):
     for k in range(3):
         partyl.append(Label(frame2))
         partyl[k].grid(row=1, column=k)
-        
+    l=0    
     for j in range(len(champion)):
+        
         button.append(Button(frame1, image=champion[j]._photo, bd=0, command=lambda n=j:masuk(n)))
-        button[j].grid(row=0, column= j)
-    
+        button[j].grid(row=0, column=l)
+        Label(frame1, text='HP: '+str(champion[j].getHp())+'\nAttack: '+str(champion[j].getattack()), justify='left').grid(row=0, column=l+1)
+        l=l+2
     
     Button(frame2, text='find match', command=lambda:find(party)).grid(row=2, columnspan=3)
     
@@ -165,7 +168,7 @@ def findmatch(party, akun):
     with open('pa.csv', 'r') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
-            if row['USER'] not in bot or akun != row['USER']:
+            if row['USER'] != akun and row['USER'] not in bot:
                 bot.append(row['USER'])
     
     get = random.choice(bot)
@@ -240,6 +243,7 @@ def findmatch(party, akun):
             main.destroy()
             Label(hasil, text="Victory", font=100).grid(row=0)
             Button(hasil, text="Continue", command=back).grid(row=1)
+            
     
     main = Frame(root)
     main.pack(pady=20, padx=10)
@@ -254,14 +258,11 @@ def findmatch(party, akun):
         label[i].grid(column=1)
         button.append(Button(main, image=ally[i]._photo, bd=0, activebackground='blue', command=lambda:pukul(i, random.choice(pilihe))))
         button[i].grid(row=i+1, column=0)
-       
-    
+           
     for i in range(len(enemy)):
         labele.append(Label(main, text='HP: '+str(enemy[i].getHp())+'\nAttack: '+str(enemy[i].getattack()), justify='left'))
         labele[i].grid(row=i+1, column=4)
-    
-    
-    
+        
     pen=[]
     for i in range(len(enemy)):
         pen.append(Label(main, image=enemy[i]._photo, bd=0))
