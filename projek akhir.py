@@ -39,8 +39,8 @@ class Karakter:
 
 
 root = Tk()
-# root.geometry('400x200')
-root.title("kamus")
+
+root.title("game")
 
 def image():
     global pto
@@ -144,9 +144,11 @@ def play(akun):
                 champion.append(Karakter(row['NAMA'], a, b, row['PHOTO'], index))
     print(len(champion))
     print(champion)
+    
     for k in range(3):
         partyl.append(Label(frame2, bd=0))
         partyl[k].grid(row=1, column=k)
+        
     def masuk(nama, k):
         if nama not in party:
             if len(party) <= 4:
@@ -156,8 +158,9 @@ def play(akun):
                 partyl[len(party)-1].config(image=k)
             else:
                 print("nothing")
-        
+   
             print(nama)
+    
     def find(party):
         if len(party) >= 3:
             frame1.destroy()
@@ -175,6 +178,7 @@ def findmatch(party, akun):
     ally=[]
     enemy=[]
     bot=[]
+    
     with open('pa.csv', 'r') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
@@ -204,7 +208,6 @@ def findmatch(party, akun):
                 break
             enemy.remove(random.choice(enemy))
             
-    # print(enemy)
     pilih=[0,1,2]
     pilihe=[0,1,2]
     label=[]
@@ -228,13 +231,11 @@ def findmatch(party, akun):
         enemy[random.choice(pilihe)].memukul(ally[randally])
         label[randally].config(text='HP: '+str(ally[randally].getHp())+'\nAttack: '+str(ally[randally].getattack()), justify='left')
         if enemy[j]._hp <= 0:
-            # enemy.remove(enemy[j])
             pilihe.remove(j)
             labele[j].destroy()
             pen[j].destroy()
             time.sleep(5)
         if ally[randally]._hp <= 0:
-            # ally.remove(ally[randally])
             pilih.remove(randally)
             label[randally].destroy()
             button[randally].destroy()
@@ -266,12 +267,7 @@ def findmatch(party, akun):
         button.append(Button(main, image=ally[i]._photo, bd=0, command=lambda:pukul(i, random.choice(pilihe))))
         button[i].grid(row=i+1, column=0)
     
-    # Button(main, image=ally[0]._photo, bd=0, command=lambda:pukul(0, random.choice(pilih))).grid(row=1, column=0)
-    # Button(main, image=ally[1]._photo, bd=0, command=lambda:pukul(1, random.choice(pilih))).grid(row=2, column=0)
-    # Button(main, image=ally[2]._photo, bd=0, command=lambda:pukul(2, random.choice(pilih))).grid(row=3, column=0)
-        # HP1=doraemon.getHp()
-        # HPdoreamon=Label(main, text='HP: '+str(HP1), bd=0)
-        # HPdoreamon.grid(row=1, column=1, sticky=W)
+    
        
     
     for i in range(len(enemy)):
@@ -286,12 +282,7 @@ def findmatch(party, akun):
         pen[i].grid(row=i+1, column=3)
     
     
-    # Label(main, text=a).grid(row=1, column=3)
-    # HP2=Batman.getHp()
-    # HPbat=Label(main, text='HP: '+str(HP2))
-    # HPbat.grid(row=1, column=4)
-    # Button(main, text='Doraemon',image=pto, bd=0, command=lambda:[doraemon.memukul(Batman), ubah() ]).grid(row=1, column=0)
-    
+
 def regist():
     def tofrm():
         frm2.destroy()
@@ -374,7 +365,6 @@ def regist():
     E3.grid(column=0, row=8, sticky=EW)
     
     B1=Button(frm2, text='register', command=reg)
-    # B1.pack()
     B1.grid(column=0, row=9)
     
     loginn = Button(frm2, text='login', fg='black', bd=0, command=tofrm, activeforeground='grey')
